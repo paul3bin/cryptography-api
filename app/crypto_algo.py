@@ -88,6 +88,9 @@ class VigenereCipher:
 
 
 class MorseCode:
+
+    def __init__(self, message) -> None:
+        self.message = message
     # Function that returns value or key from morse_dict dictionary
     def getDictItems(self, val, option):
         morse_dict = {'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
@@ -108,9 +111,9 @@ class MorseCode:
                     return key
 
     # Function to encrypt given message
-    def encrypt(self, message):
+    def encrypt(self):
         cipherText = ''
-        for character in message:
+        for character in self.message:
             if character == ' ':
                 cipherText += '/ '
             else:
@@ -119,9 +122,9 @@ class MorseCode:
         return cipherText[:-1]
 
     # Function to decrypt given cipher text
-    def decrypt(self, message):
+    def decrypt(self):
         plainText = ''
-        characterList = message.split(' ')
+        characterList = self.message.split(' ')
         for character in characterList:
             if character == '/':
                 plainText += ' '
@@ -133,7 +136,7 @@ class MorseCode:
 class RunningKeyCipher:
 
     def __init__(self, plainText, key):
-    # converting the plain text and key to upper case
+        # converting the plain text and key to upper case
         self.pt = list(plainText.upper())
         self.ky = list(key.upper())
 
@@ -155,9 +158,10 @@ class RunningKeyCipher:
     def encrypt(self):
         encryptedText = ''
         for i in range(len(self.pt)):
-            encryptedText += self.tabulaRecta.values[ord(self.pt[i])-65][ord(self.ky[i])-65]
+            encryptedText += self.tabulaRecta.values[ord(
+                self.pt[i])-65][ord(self.ky[i])-65]
         return encryptedText
-    
+
     def decrypt(self):
         decryptedText = ''
         for i in range(len(self.pt)):
