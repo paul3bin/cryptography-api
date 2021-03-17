@@ -92,6 +92,7 @@ class MorseCode:
     def __init__(self, message) -> None:
         self.message = message
     # Function that returns value or key from morse_dict dictionary
+
     def getDictItems(self, val, option):
         morse_dict = {'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
                       'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
