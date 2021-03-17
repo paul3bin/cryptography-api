@@ -5,7 +5,7 @@ from flask_cors import CORS,cross_origin
 
 # Creating flask application
 
-origin_lists = ['http://localhost:3000/',]
+origin_lists = ['http://localhost:3000/', 'https://cryptography-io.web.app']
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
