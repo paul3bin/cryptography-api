@@ -35,36 +35,19 @@ class VigenereCipher:
     # Initialization funtion
     def __init__(self, text, key):
 
-        # creating a list of character from the given text and key in upper case.
-        txt = list(text.upper())
-        ky = list(key.upper())
-
-        # Removing the white space characters.
-        for char in txt:
-            if char == ' ':
-                txt.remove(char)
-        # Removing white spaces from the key
-        for char in ky:
-            if char == ' ':
-                ky.remove(char)
-
-        self.text = txt
-        self.key = ky
+        # converting key and text to uppercase and removing spaces from them.
+        self.text = "".join(text.upper().split(' '))
+        self.key = "".join(key.upper().split(' '))
 
     # Function that encrypts the given plain text using given key.
     def encrypt(self):
         cipher_text, j = [], 0
         for i in range(len(self.text)):
-            if j < len(self.key):
-                character = (
-                    (ord(self.text[i])+ord(self.key[j])) % 26)+ord('A')
-                j += 1
-            else:
+            if j > len(self.key)-1:
                 j = 0
-                character = (
-                    (ord(self.text[i])+ord(self.key[j])) % 26)+ord('A')
-                j += 1
 
+            character = ((ord(self.text[i])+ord(self.key[j])) % 26)+ord('A')
+            j += 1
             cipher_text.append(chr(character))
         return ''.join(cipher_text)
 
@@ -72,17 +55,12 @@ class VigenereCipher:
     def decrypt(self):
         plain_text, j = [], 0
         for i in range(len(self.text)):
-            if j < len(self.key):
-                character = (
-                    (ord(self.text[i])-ord(self.key[j])+26) % 26)+ord('A')
-                plain_text.append(chr(character))
-                j += 1
-            else:
+            if j > len(self.key)-1:
                 j = 0
-                character = (
-                    (ord(self.text[i])-ord(self.key[j])+26) % 26)+ord('A')
-                plain_text.append(chr(character))
-                j += 1
+
+            character = ((ord(self.text[i])-ord(self.key[j])+26) % 26)+ord('A')
+            plain_text.append(chr(character))
+            j += 1
 
         return ''.join(plain_text)
 
@@ -91,8 +69,8 @@ class MorseCode:
 
     def __init__(self, message) -> None:
         self.message = message
-    # Function that returns value or key from morse_dict dictionary
 
+    # Function that returns value or key from morse_dict dictionary
     def getDictItems(self, val, option):
         morse_dict = {'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
                       'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
@@ -103,13 +81,12 @@ class MorseCode:
                       '.': '.-.-.-', ',': '--..--', '?': '..--..', '!': '-.-.--', '/': '-..-.',
                       '(': '-.--.', ')': '-.--.-', '&': '.-...', ':': '---...', ';': '-.-.-.',
                       '=': '-...-', '+': '.-.-.', '-': '-....-', '_': '..--.-', '$': '...-..-', '@': '.--.-.'}
-        if option == 1:
-            return morse_dict[val]
 
-        elif option == 2:
-            for key, value in morse_dict.items():
-                if val == value:
-                    return key
+        operation = {1: morse_dict, 2: list(morse_dict.keys())}
+        if option == 1:
+            return operation[option][val]
+        else:
+            return operation[option][list(morse_dict.values()).index(val)]
 
     # Function to encrypt given message
     def encrypt(self):
@@ -137,23 +114,15 @@ class MorseCode:
 class RunningKeyCipher:
 
     def __init__(self, plainText, key):
-        # converting the plain text and key to upper case
-        self.pt = list(plainText.upper())
-        self.ky = list(key.upper())
-
-        # removing spaces in key and plain text
-        for char in self.ky:
-            if char == ' ':
-                self.ky.remove(char)
-        for char in self.pt:
-            if char == ' ':
-                self.pt.remove(char)
+        # converting the plain text and key to upper case and removing spaces
+        self.pt = "".join(plainText.upper().split(' '))
+        self.ky = "".join(key.upper().split(' '))
 
         # creating a DataFrame of size 26x26
         tab, tableau = [chr(a) for a in range(65, 91)], []
         for i in range(26):
-            a = tab[i:]+tab[:i]
-            tableau.append(a)
+            row = tab[i:]+tab[:i]
+            tableau.append(row)
         self.tabulaRecta = DataFrame(tableau, index=tab, columns=tab)
 
     def encrypt(self):
