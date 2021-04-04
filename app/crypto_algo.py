@@ -138,3 +138,20 @@ class RunningKeyCipher:
             decryptedText += ''.join(
                 self.tabulaRecta[self.tabulaRecta[self.ky[i]] == self.pt[i]].index.values)
         return decryptedText
+
+
+class ROT13:
+
+    def __init__(self, text: str):
+        # removing spaces from the text
+        self.text = "".join(text.upper().split(' '))
+
+    def encrypt(self):
+
+        return "".join([chr(ord(alphabet)-13) if ord(alphabet) > ord('A')+12
+                        else chr(ord(alphabet)+13) for alphabet in self.text])
+
+    def decrypt(self):
+
+        return "".join([chr(ord(alphabet)-13) if ord(alphabet) > ord('A')+12
+                        else chr(ord(alphabet)+13) for alphabet in self.text])
