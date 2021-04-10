@@ -2,6 +2,8 @@ from .crypto_algo import CaesarCipher, MorseCode, VigenereCipher, RunningKeyCiph
 from flask import Flask, request
 from flask_restful import Api, Resource
 from flask_cors import CORS, cross_origin
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 # Creating flask application
 
@@ -12,9 +14,14 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app=app)
 
+limiter = Limiter(app=app,
+                  key_func=get_remote_address,
+                  default_limits=["200 per day", "50 per hour"])
+
 
 class ROT13API(Resource):
     @cross_origin(origin=origin_lists, headers=['Content-Type', ])
+    @limiter.limit("5 per minute")
     def post(self):
         form_data = request.get_json()
         if form_data["operation"] == 'encrypt':
@@ -25,6 +32,7 @@ class ROT13API(Resource):
 
 class CaesarAPI(Resource):
     @cross_origin(origin=origin_lists, headers=['Content-Type', ])
+    @limiter.limit("5 per minute")
     def post(self):
         form_data = request.get_json()
 
@@ -40,6 +48,7 @@ class CaesarAPI(Resource):
 
 class MorseCodeAPI(Resource):
     @cross_origin(origin=origin_lists, headers=['Content-Type', ])
+    @limiter.limit("5 per minute")
     def post(self):
         form_data = request.get_json()
 
@@ -55,6 +64,7 @@ class MorseCodeAPI(Resource):
 
 class VignereCipherAPI(Resource):
     @cross_origin(origin=origin_lists, headers=['Content-Type', ])
+    @limiter.limit("5 per minute")
     def post(self):
         form_data = request.get_json()
         if form_data["operation"] == "encrypt":
@@ -67,6 +77,7 @@ class VignereCipherAPI(Resource):
 
 class RunningKeyCipherAPI(Resource):
     @cross_origin(origin=origin_lists, headers=['Content-Type', ])
+    @limiter.limit("5 per minute")
     def post(self):
         form_data = request.get_json()
         if form_data["operation"] == "encrypt":
