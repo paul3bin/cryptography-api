@@ -3,4 +3,4 @@ flask-restful
 pandas
 gunicorn
 flask-cors
-Flask-Limiters
+Flask-Limiters==1.4
