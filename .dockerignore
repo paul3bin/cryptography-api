@@ -1,0 +1,5 @@
+.gitattributes
+.git
+LICENCE
+Procfile
+runtime.txt
