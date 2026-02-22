@@ -44,6 +44,14 @@ async fn rot13_handler(axum::Json(payload): Json<CipherRequest>) -> Json<serde_j
     }))
 }
 
+async fn morse_code_handler(axum::Json(payload): Json<CipherRequest>) -> Json<serde_json::Value> {
+    let result = ciphers::morse_code(&payload.text, &payload.operation);
+
+    Json(json!({
+        "result": result
+    }))
+}
+
 async fn home() -> Json<serde_json::Value> {
     Json(json!({
         "Use": {
@@ -78,6 +86,7 @@ async fn main() {
         .route("/", get(home))
         .route("/caesar", post(caesar_handler))
         .route("/rot13", post(rot13_handler))
+        .route("/morsecode", post(morse_code_handler))
         .layer(TraceLayer::new_for_http());
 
     tracing::info!("Server running on {}", addr);
